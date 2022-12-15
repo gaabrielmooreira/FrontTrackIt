@@ -1,5 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
+// fonte para o Header, font-family: 'Playball', cursive;
+
 const GlobalStyle = createGlobalStyle`
     /* http://meyerweb.com/eric/tools/css/reset/ 
     v2.0 | 20110126
@@ -33,6 +35,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
+        font-family: 'Lexend Deca', sans-serif;
     }
     ol, ul {
         list-style: none;
