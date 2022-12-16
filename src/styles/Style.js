@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledPageContainer = styled.div`
     width: 100vw;
-    height: 100vw;
+    height: 100vh;
     box-sizing: border-box;
     padding: 68px 36px;
     display: flex;
