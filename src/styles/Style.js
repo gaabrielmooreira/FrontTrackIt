@@ -29,13 +29,21 @@ export const StyledInput = styled.input`
     border: 1px solid #D4D4D4;
     border-radius: 5px;
     margin-bottom: 6px;
+    background-color: #FFFFFF;
     &::placeholder{
         font-size: 20px;
         height: 25px;
         color: #D4D4D4;
     }
+    &:disabled{
+        background-color: #F2F2F2;
+        color: #AFAFAF;
+    }
 `
 export const StyledButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 45px;
     border: none;
@@ -45,5 +53,8 @@ export const StyledButton = styled.button`
     color: #FFFFFF;
     &:hover{
         cursor: pointer;
+    }
+    &:disabled{
+        opacity: 0.7;
     }
 `
