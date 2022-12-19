@@ -24,7 +24,7 @@ export default function Register(){
         });
         promise.catch((err) =>{
             setIsLoading(false);
-            alert(err.response.data);
+            alert(err.response.data.message);
         });
     }
     
