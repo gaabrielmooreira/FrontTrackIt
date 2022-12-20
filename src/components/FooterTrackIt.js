@@ -8,15 +8,15 @@ import PercentageContext from "../contexts/PercentageContext";
 export default function FooterTrackIt() {
     const {percentage} = useContext(PercentageContext);
     return (
-        <FooterContainer>
+        <FooterContainer data-test="menu">
             <LinkContainer>
-                <Link to="/habitos">
+                <Link data-test="habit-link" to="/habitos">
                     Hábitos
                 </Link>
             </LinkContainer>
 
             <TodayLinkContainer>
-                <Link to="/hoje">
+                <Link data-test="today-link" to="/hoje">
                     <CircularProgressbar
                         value={percentage}
                         text={"Hoje"}
@@ -33,7 +33,7 @@ export default function FooterTrackIt() {
             </TodayLinkContainer>
 
             <LinkContainer>
-                <Link to="/historico">
+                <Link data-test="history-link" to="/historico">
                     Histórico
                 </Link>
             </LinkContainer>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export default function WeekdayCard({markDay,weekday,index,markedDays,isSaveLoading}){
     return (
-        <WeekdayCardContainer onClick={() => markDay(index)} isMarked={markedDays.includes(index)} disabled={isSaveLoading}>
+        <WeekdayCardContainer data-test="habit-day" onClick={() => markDay(index)} isMarked={markedDays.includes(index)} disabled={isSaveLoading}>
             {weekday}
         </WeekdayCardContainer>
     )

@@ -15,15 +15,15 @@ export default function HabitCard({id,name,days,deleteHabit}){
     }
 
     return(
-        <CardContainer>
+        <CardContainer data-test="habit-container">
             <div>
-                <CardText>{name}</CardText>
+                <CardText data-test="habit-name">{name}</CardText>
                 <WeekdaysContainer>
-                    {weekdays.map((w,index) => <DayCard key={index} isMarked={days.includes(index)}>{w}</DayCard>)}
+                    {weekdays.map((w,index) => <DayCard data-test="habit-day" key={index} isMarked={days.includes(index)}>{w}</DayCard>)}
                 </WeekdaysContainer>
             </div>
 
-            <ion-icon onClick={() => setScreenConfirm(true)} name="trash-outline"></ion-icon>
+            <ion-icon data-test="habit-delete-btn" onClick={() => setScreenConfirm(true)} name="trash-outline"></ion-icon>
 
             {screenConfirm && 
                 <DarkContainer>

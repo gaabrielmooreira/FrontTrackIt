@@ -99,12 +99,13 @@ export default function HabitsPage() {
             <ContentContainer>
                 <CreateHabitContainer>
                     <h2>Meus Hábitos</h2>
-                    <button onClick={() => setIsCreateCardClosed(false)}>+</button>
+                    <button data-test="habit-create-btn" onClick={() => setIsCreateCardClosed(false)}>+</button>
                 </CreateHabitContainer>
 
                 {!isCreateCardClosed &&
-                    <CreateHabitCard>
+                    <CreateHabitCard data-test="habit-create-container">
                         <input
+                            data-test="habit-name-input"
                             onChange={(e) => setHabitName(e.target.value)}
                             value={habitName}
                             type="text"
@@ -124,8 +125,8 @@ export default function HabitsPage() {
                             }
                         </WeekdaysContainer>
                         <ActionContainer>
-                            <CancelButton onClick={() => setIsCreateCardClosed(true)} disabled={isSaveLoading}>Cancelar</CancelButton>
-                            <SaveButton onClick={saveHabit} disabled={isSaveLoading}>
+                            <CancelButton data-test="habit-create-cancel-btn" onClick={() => setIsCreateCardClosed(true)} disabled={isSaveLoading}>Cancelar</CancelButton>
+                            <SaveButton data-test="habit-create-save-btn" onClick={saveHabit} disabled={isSaveLoading}>
                                 {isSaveLoading ? <ThreeDots
                                     height="13"
                                     width="51"

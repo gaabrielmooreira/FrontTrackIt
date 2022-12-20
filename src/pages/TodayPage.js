@@ -88,8 +88,8 @@ export default function TodayPage() {
             <HeaderTrackIt />
             <ContentContainer>
                 <DayInfos>
-                    <h2>{dayOfWeek()}, {d.format('DD/MM')}</h2>
-                    <HabitControl atLeastOneDone={percentage === 0 ? false:true}>
+                    <h2 data-test="today">{dayOfWeek()}, {d.format('DD/MM')}</h2>
+                    <HabitControl data-test="today-counter" atLeastOneDone={percentage === 0 ? false:true}>
                         {percentage === 0 ? "Nenhum hábito concluído ainda":`${percentage.toFixed(0)}% dos hábitos concluídos`}
                     </HabitControl>
                 </DayInfos>

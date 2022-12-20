@@ -6,7 +6,7 @@ export default function HeaderTrackIt(){
     const {userDetails} = useContext(UserDetailsContext);
     const {image} = userDetails;
     return(
-        <HeaderContainer>
+        <HeaderContainer data-test="header">
             <h1>TrackIt</h1>
             <img src={image} alt="Foto do Usuário"/>
         </HeaderContainer>
@@ -26,6 +26,7 @@ const HeaderContainer = styled.header`
     padding: 0 18px;
     background-color: #126BA5;
     z-index: 1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     h1{
         font-family: 'Playball', cursive;
         font-size: 39px;

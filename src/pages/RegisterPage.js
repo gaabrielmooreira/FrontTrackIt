@@ -8,7 +8,7 @@ export default function RegisterPage(){
         <StyledPageContainer>
             <img src={logo} alt="Logo do TrackIt"/>
             <Register/>
-            <Link to="/">
+            <Link data-test="login-link" to="/">
                 <p>Já tem uma conta? Faça Login!</p>
             </Link>
         </StyledPageContainer>

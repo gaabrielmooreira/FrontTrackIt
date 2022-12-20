@@ -3,13 +3,23 @@ import styled from "styled-components"
 export default function DayHabitCard({id,name,currentSequence,highestSequence,done,handleMarkHabit}) {
     
     return (
-        <DayHabitCardContainer isDone={done}>
+        <DayHabitCardContainer data-test="today-habit-container" isDone={done}>
             <div>
-                <CardText>{name}</CardText>
-                <CurrentSequence isDone={done}>Sequência atual: <span>{(currentSequence > 1) ? `${currentSequence} dias`:`${currentSequence} dia`}</span></CurrentSequence>
-                <HighestSequence isCurrent={currentSequence === highestSequence ? true:false}>Seu recorde: <span>{(highestSequence > 1) ? `${highestSequence} dias`:`${highestSequence} dia`}</span></HighestSequence>
+                <CardText data-test="today-habit-name">{name}</CardText>
+                <CurrentSequence data-test="today-habit-sequence" isDone={done}>
+                    Sequência atual: 
+                    <span>
+                        {(currentSequence > 1) ? `${currentSequence} dias`:`${currentSequence} dia`}
+                    </span>
+                </CurrentSequence>
+                <HighestSequence data-test="today-habit-record" isCurrent={currentSequence === highestSequence ? true:false}>
+                    Seu recorde: 
+                    <span>
+                        {(highestSequence > 1) ? `${highestSequence} dias`:`${highestSequence} dia`}
+                    </span>
+                </HighestSequence>
             </div>
-            <ion-icon onClick={() => handleMarkHabit(id,done)} name="checkbox"></ion-icon>
+            <ion-icon data-test="today-habit-check-btn" onClick={() => handleMarkHabit(id,done)} name="checkbox"></ion-icon>
         </DayHabitCardContainer>
     )
 }
