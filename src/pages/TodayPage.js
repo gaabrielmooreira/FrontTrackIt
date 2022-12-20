@@ -7,12 +7,15 @@ import HeaderTrackIt from "../components/HeaderTrackIt"
 import AuthContext from "../contexts/AuthContext";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
+import PercentageContext from "../contexts/PercentageContext";
 
 export default function TodayPage() {
     const {token} = useContext(AuthContext);
+    const {percentage,setPercentage} = useContext(PercentageContext);
+
     const [todayList,setTodayList] = useState([]);
-    const [numOfHabitsDone,setNumOfHabitsDone] = useState(0);
     const [isHabitChanged,setIsHabitChanged] = useState(false);
+
     const d = dayjs();
     dayjs.extend(weekday);
     
@@ -31,7 +34,7 @@ export default function TodayPage() {
             newTodayList.forEach(element => {
                 if(element.done === false) count--;
             });
-            setNumOfHabitsDone(count);
+            setPercentage((count/newTodayList.length)*100);
         });
         promise.catch(err => console.log(err));
     },[isHabitChanged]);
@@ -86,8 +89,8 @@ export default function TodayPage() {
             <ContentContainer>
                 <DayInfos>
                     <h2>{dayOfWeek()}, {d.format('DD/MM')}</h2>
-                    <HabitControl atLeastOneDone={numOfHabitsDone === 0 ? false:true}>
-                        {numOfHabitsDone === 0 ? "Nenhum hábito concluído ainda":`${(numOfHabitsDone/todayList.length)*100}% dos hábitos concluídos`}
+                    <HabitControl atLeastOneDone={percentage === 0 ? false:true}>
+                        {percentage === 0 ? "Nenhum hábito concluído ainda":`${percentage}% dos hábitos concluídos`}
                     </HabitControl>
                 </DayInfos>
                 {todayList.map((h) => <DayHabitCard 

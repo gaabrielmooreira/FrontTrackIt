@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+  import "react-circular-progressbar/dist/styles.css";
+import { useContext } from "react";
+import PercentageContext from "../contexts/PercentageContext";
 
-export default function FooterTrackIt(){
-    return(
+export default function FooterTrackIt() {
+    const {percentage} = useContext(PercentageContext);
+    return (
         <FooterContainer>
             <LinkContainer>
                 <Link to="/habitos">
@@ -12,7 +17,18 @@ export default function FooterTrackIt(){
 
             <TodayLinkContainer>
                 <Link to="/hoje">
-                    Hoje
+                    <CircularProgressbar
+                        value={percentage}
+                        text={"Hoje"}
+                        background
+                        backgroundPadding={6}
+                        styles={buildStyles({
+                            backgroundColor: "#3e98c7",
+                            textColor: "#fff",
+                            pathColor: "#fff",
+                            trailColor: "transparent"
+                        })}
+                    />
                 </Link>
             </TodayLinkContainer>
 
