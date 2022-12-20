@@ -34,7 +34,11 @@ export default function TodayPage() {
             newTodayList.forEach(element => {
                 if(element.done === false) count--;
             });
-            setPercentage((count/newTodayList.length)*100);
+            if(newTodayList.length !== 0){
+                setPercentage((count/newTodayList.length)*100);
+            } else {
+                setPercentage(0);
+            }
         });
         promise.catch(err => console.log(err));
     },[isHabitChanged]);

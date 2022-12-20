@@ -30,7 +30,7 @@ export default function HabitCard({id,name,days,deleteHabit}){
                     <ConfirmationContainer>
                         <h3>Você deseja mesmo deletar esse hábito?</h3>
                         <div>
-                            <ConfirmButton onClick={confirmDelete}>Confirm</ConfirmButton>
+                            <ConfirmButton data-test="habit-delete-btn" onClick={confirmDelete}>Confirm</ConfirmButton>
                             <CancelButton onClick={cancelDelete}>Cancel</CancelButton>
                         </div>
                     </ConfirmationContainer>
