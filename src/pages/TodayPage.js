@@ -5,11 +5,17 @@ import DayHabitCard from "../components/DayHabitCard";
 import FooterTrackIt from "../components/FooterTrackIt"
 import HeaderTrackIt from "../components/HeaderTrackIt"
 import AuthContext from "../contexts/AuthContext";
+import dayjs from "dayjs";
+import weekday from "dayjs/plugin/weekday";
 
 export default function TodayPage() {
     const {token} = useContext(AuthContext);
     const [todayList,setTodayList] = useState([]);
-
+    const [numOfHabitsDone,setNumOfHabitsDone] = useState(0);
+    const [isHabitChanged,setIsHabitChanged] = useState(false);
+    const d = dayjs();
+    dayjs.extend(weekday);
+    
     useEffect(() => {
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
         const config = {
@@ -18,16 +24,71 @@ export default function TodayPage() {
             }
         }
         const promise = axios.get(URL,config);
-        promise.then(res => setTodayList(res.data));
+        promise.then(res => {
+            const newTodayList = res.data;
+            setTodayList(newTodayList);
+            let count = newTodayList.length;
+            newTodayList.forEach(element => {
+                if(element.done === false) count--;
+            });
+            setNumOfHabitsDone(count);
+        });
         promise.catch(err => console.log(err));
-    },[]);
+    },[isHabitChanged]);
+
+    function handleMarkHabit(habitId,done){
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const body = {};
+        let URL = "";
+        if(done === false){
+            URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/check`
+        } else {
+            URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/uncheck`
+        }
+        const promise = axios.post(URL,body,config);
+        promise.then(() => {
+            if(isHabitChanged === false){
+                setIsHabitChanged(true);
+            }else{
+                setIsHabitChanged(false);
+            }
+            console.log("Sucesso");
+        });
+        promise.catch(() => console.log("Erro"));
+    }
+
+    function dayOfWeek(){
+        switch (d.weekday()){
+            case 0:
+                return "Domingo";
+            case 1:
+                return "Segunda";
+            case 2:
+                return "Terça";
+            case 3:
+                return "Quarta";
+            case 4:
+                return "Quinta";
+            case 5:
+                return "Sexta";
+            case 6:
+                return "Sábado";
+        }
+    }
+
     return (
         <PageContainer>
             <HeaderTrackIt />
             <ContentContainer>
                 <DayInfos>
-                    <h2>Segunda, 17/05</h2>
-                    <HabitControl>Nenhum hábito concluído ainda</HabitControl>
+                    <h2>{dayOfWeek()}, {d.format('DD/MM')}</h2>
+                    <HabitControl atLeastOneDone={numOfHabitsDone === 0 ? false:true}>
+                        {numOfHabitsDone === 0 ? "Nenhum hábito concluído ainda":`${(numOfHabitsDone/todayList.length)*100}% dos hábitos concluídos`}
+                    </HabitControl>
                 </DayInfos>
                 {todayList.map((h) => <DayHabitCard 
                     key={h.id} 
@@ -36,6 +97,7 @@ export default function TodayPage() {
                     highestSequence={h.highestSequence}
                     name={h.name}
                     done={h.done}
+                    handleMarkHabit={handleMarkHabit}
                 />)}
             </ContentContainer>
             <FooterTrackIt />
@@ -48,11 +110,9 @@ const PageContainer = styled.div`
     min-height: 100vh;
     background-color: #E5E5E5;
 `
-
 const ContentContainer = styled.main`
     padding: 101px 18px;
 `
-
 const DayInfos = styled.div`
     margin-bottom: 20px;
     h2{
@@ -61,11 +121,10 @@ const DayInfos = styled.div`
         color:#126BA5;
     }
 `
-
 const HabitControl = styled.p`
     font-size: 18px;
     line-height: 22.5px;
-    color: #BABABA;
+    color: ${props => props.atLeastOneDone ? "#8FC549":"#BABABA"};
 `
 
 

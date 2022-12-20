@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export default function DayHabitCard({id,name,currentSequence,highestSequence,done}) {
+export default function DayHabitCard({id,name,currentSequence,highestSequence,done,handleMarkHabit}) {
     
     return (
         <DayHabitCardContainer isDone={done}>
@@ -9,7 +9,7 @@ export default function DayHabitCard({id,name,currentSequence,highestSequence,do
                 <CurrentSequence isDone={done}>Sequência atual: <span>{(currentSequence > 1) ? `${currentSequence} dias`:`${currentSequence} dia`}</span></CurrentSequence>
                 <HighestSequence isCurrent={currentSequence === highestSequence ? true:false}>Seu recorde: <span>{(highestSequence > 1) ? `${highestSequence} dias`:`${highestSequence} dia`}</span></HighestSequence>
             </div>
-            <ion-icon name="checkbox"></ion-icon>
+            <ion-icon onClick={() => handleMarkHabit(id,done)} name="checkbox"></ion-icon>
         </DayHabitCardContainer>
     )
 }

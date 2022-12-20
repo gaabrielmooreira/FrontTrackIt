@@ -17,7 +17,8 @@ export default function HabitsPage() {
     const [markedDays, setMarkedDays] = useState([]);
     const [habitList, setHabitList] = useState([]);
     const [isSaveLoading, setIsSaveLoading] = useState(false);
-
+    const [isHabitChanged,setIsHabitChanged] = useState(false);
+    
     useEffect(() => {
         const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
         const config = {
@@ -28,7 +29,7 @@ export default function HabitsPage() {
         const promise = axios.get(URL, config);
         promise.then(res => setHabitList(res.data));
         promise.catch(err => console.log(err));
-    }, [saveHabit, deleteHabit, token]);
+    }, [isHabitChanged, token]);
 
     function saveHabit() {
         setIsSaveLoading(true);
@@ -48,6 +49,11 @@ export default function HabitsPage() {
             setMarkedDays([]);
             setIsSaveLoading(false);
             setIsCreateCardClosed(true);
+            if(isHabitChanged === false){
+                setIsHabitChanged(true);
+            }else{
+                setIsHabitChanged(false);
+            }
         });
         promise.catch(() => {
             if (habitName === "" || markedDays.length === 0) {
@@ -74,7 +80,14 @@ export default function HabitsPage() {
             }
         };
         const promise = axios.delete(URL, config);
-        promise.then(() => console.log("Deletado com sucesso."));
+        promise.then(() => {
+            if(isHabitChanged === false){
+                setIsHabitChanged(true);
+            }else{
+                setIsHabitChanged(false);
+            }
+            console.log("Deletado com sucesso.");
+        });
         promise.catch((err) => console.log(err.response.data));
 
     }
