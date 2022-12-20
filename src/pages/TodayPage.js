@@ -1,9 +1,26 @@
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import DayHabitCard from "../components/DayHabitCard";
 import FooterTrackIt from "../components/FooterTrackIt"
 import HeaderTrackIt from "../components/HeaderTrackIt"
+import AuthContext from "../contexts/AuthContext";
 
 export default function TodayPage() {
+    const {token} = useContext(AuthContext);
+    const [todayList,setTodayList] = useState([]);
+
+    useEffect(() => {
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.get(URL,config);
+        promise.then(res => setTodayList(res.data));
+        promise.catch(err => console.log(err));
+    },[]);
     return (
         <PageContainer>
             <HeaderTrackIt />
@@ -12,9 +29,14 @@ export default function TodayPage() {
                     <h2>Segunda, 17/05</h2>
                     <HabitControl>Nenhum hábito concluído ainda</HabitControl>
                 </DayInfos>
-                <DayHabitCard />
-                <DayHabitCard />
-                <DayHabitCard />
+                {todayList.map((h) => <DayHabitCard 
+                    key={h.id} 
+                    id={h.id}
+                    currentSequence={h.currentSequence}
+                    highestSequence={h.highestSequence}
+                    name={h.name}
+                    done={h.done}
+                />)}
             </ContentContainer>
             <FooterTrackIt />
         </PageContainer>

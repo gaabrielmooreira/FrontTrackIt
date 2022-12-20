@@ -1,27 +1,41 @@
+import { useState } from "react"
 import styled from "styled-components"
+import weekdays from "../constants/weekdays"
 
-export default function HabitCard(){
-    const text = "Ler 1 capítulo de livro";
-    const obj = [
-        {weekday: 'D', isMarked: false},
-        {weekday: 'S', isMarked: true},
-        {weekday: 'T', isMarked: false},
-        {weekday: 'Q', isMarked: true},
-        {weekday: 'Q', isMarked: false},
-        {weekday: 'S', isMarked: true},
-        {weekday: 'S', isMarked: false}
-    ]
+export default function HabitCard({id,name,days,deleteHabit}){
+    const [screenConfirm,setScreenConfirm] = useState(false);
+
+    function confirmDelete(){
+        deleteHabit(id);
+        setScreenConfirm(false);
+    }
+
+    function cancelDelete(){
+        setScreenConfirm(false);
+    }
 
     return(
         <CardContainer>
             <div>
-                <CardText>{text}</CardText>
+                <CardText>{name}</CardText>
                 <WeekdaysContainer>
-                    {obj.map((o) => <DayCard isMarked={o.isMarked}>{o.weekday}</DayCard>)}
+                    {weekdays.map((w,index) => <DayCard key={index} isMarked={days.includes(index)}>{w}</DayCard>)}
                 </WeekdaysContainer>
             </div>
 
-            <ion-icon name="trash-outline"></ion-icon>
+            <ion-icon onClick={() => setScreenConfirm(true)} name="trash-outline"></ion-icon>
+
+            {screenConfirm && 
+                <DarkContainer>
+                    <ConfirmationContainer>
+                        <h3>Você deseja mesmo deletar esse hábito?</h3>
+                        <div>
+                            <ConfirmButton onClick={confirmDelete}>Confirm</ConfirmButton>
+                            <CancelButton onClick={cancelDelete}>Cancel</CancelButton>
+                        </div>
+                    </ConfirmationContainer>
+                </DarkContainer>
+            }
         </CardContainer>
     )
 }
@@ -63,4 +77,52 @@ const DayCard = styled.div`
     color: ${props => props.isMarked ? "#FFFFFF":"#DBDBDB"};
     border-radius: 5px;
     background-color: ${props => props.isMarked ? "#CFCFCF":"#FFFFFF"};
+`
+const DarkContainer = styled.div`
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+`
+const ConfirmationContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #FFFFFF;
+    transform: translate(-50%,-50%);
+    width: 300px;
+    height: 120px;
+    border-radius: 5px;
+    h3{
+        font-size: 12px;
+    }
+    div{
+        display: flex;
+        margin-top: 20px;
+    }
+
+`
+const ConfirmButton = styled.button`
+    background-color: #52B6FF;
+    border: none;
+    border-radius: 10px;
+    width: 80px;
+    height: 25px;
+    color: #FFFFFF;
+`
+const CancelButton = styled.button`
+    background-color: red;
+    border: none;
+    border-radius: 10px;
+    margin-left: 20px;
+    width: 80px;
+    height: 25px;
+    color: #FFFFFF;
 `

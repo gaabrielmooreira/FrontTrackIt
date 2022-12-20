@@ -1,15 +1,19 @@
 import { StyledForm, StyledButton,StyledInput } from "../styles/Style";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../contexts/AuthContext";
+import UserDetailsContext from "../contexts/UserDetailsContext";
 
 
 export default function Login(){
     const [isLoading,setIsLoading] = useState(false);
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
+    const {setToken} = useContext(AuthContext);
+    const {setUserDetails} = useContext(UserDetailsContext); 
 
     function loginUser(event){
         event.preventDefault();
@@ -17,7 +21,8 @@ export default function Login(){
         const promise = axios.post(URL,{email,password});
         setIsLoading(true);
         promise.then((res) =>{
-            console.log(res);
+            setUserDetails({name:res.data.name, image:res.data.image});
+            setToken(res.data.token);
             navigate("/hoje");
             setIsLoading(false);
         });

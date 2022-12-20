@@ -1,14 +1,14 @@
 import styled from "styled-components"
 
-export default function DayHabitCard() {
-    const text = "Ler 1 capítulo de livro";
+export default function DayHabitCard({id,name,currentSequence,highestSequence,done}) {
+    
     return (
-        <DayHabitCardContainer>
-            <CardInfo>
-                <CardText>{text}</CardText>
-                <p>Sequência atual: <span>4</span></p>
-                <p>Seu recorde: <span>5</span></p>
-            </CardInfo>
+        <DayHabitCardContainer isDone={done}>
+            <div>
+                <CardText>{name}</CardText>
+                <CurrentSequence isDone={done}>Sequência atual: <span>{(currentSequence > 1) ? `${currentSequence} dias`:`${currentSequence} dia`}</span></CurrentSequence>
+                <HighestSequence isCurrent={currentSequence === highestSequence ? true:false}>Seu recorde: <span>{(highestSequence > 1) ? `${highestSequence} dias`:`${highestSequence} dia`}</span></HighestSequence>
+            </div>
             <ion-icon name="checkbox"></ion-icon>
         </DayHabitCardContainer>
     )
@@ -27,17 +27,23 @@ const DayHabitCardContainer = styled.div`
     ion-icon{
         width: 81px;
         height: 81px;
-        color: #EBEBEB;
+        color: ${props => props.isDone ? "#8FC549":"#EBEBEB"};
     }
 `
-const CardInfo = styled.div`
-    p{
-        font-size: 13px;
-        line-height: 16px;
-        color: #666666;
-    }
+const CurrentSequence = styled.p`
+    font-size: 13px;
+    line-height: 16px;
+    color: #666666;
     span{
-        color: #666666;
+        color: ${props => props.isDone ? "#8FC549":"#666666"};
+    }
+`
+const HighestSequence = styled.p`
+    font-size: 13px;
+    line-height: 16px;
+    color: #666666;
+    span{
+        color: ${props => props.isCurrent ? "#8FC549":"#666666"};
     }
 `
 const CardText = styled.h3`

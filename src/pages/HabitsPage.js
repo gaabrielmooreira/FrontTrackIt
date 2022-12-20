@@ -1,37 +1,142 @@
+import axios from "axios"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import FooterTrackIt from "../components/FooterTrackIt"
 import HabitCard from "../components/HabitCard"
 import HeaderTrackIt from "../components/HeaderTrackIt"
 import weekdays from "../constants/weekdays"
+import WeekdayCard from "../components/WeekdayCard"
+import AuthContext from "../contexts/AuthContext"
+import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
+    const { token } = useContext(AuthContext);
+
+    const [isCreateCardClosed, setIsCreateCardClosed] = useState(true);
+    const [habitName, setHabitName] = useState("");
+    const [markedDays, setMarkedDays] = useState([]);
+    const [habitList, setHabitList] = useState([]);
+    const [isSaveLoading, setIsSaveLoading] = useState(false);
+
+    useEffect(() => {
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        };
+        const promise = axios.get(URL, config);
+        promise.then(res => setHabitList(res.data));
+        promise.catch(err => console.log(err));
+    }, [saveHabit, deleteHabit, token]);
+
+    function saveHabit() {
+        setIsSaveLoading(true);
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        };
+        const body = {
+            name: habitName,
+            days: markedDays
+        };
+        const promise = axios.post(URL, body, config);
+        promise.then(() => {
+            setHabitName("");
+            setMarkedDays([]);
+            setIsSaveLoading(false);
+            setIsCreateCardClosed(true);
+        });
+        promise.catch(() => {
+            if (habitName === "" || markedDays.length === 0) {
+                alert("Preencha os dados do hábito, nome e os dias.");
+            }
+            setIsSaveLoading(false);
+        });
+    }
+
+    function markDay(index) {
+        if (markedDays.includes(index)) {
+            const newArr = markedDays.filter((day) => day !== index);
+            setMarkedDays(newArr);
+        } else {
+            setMarkedDays([...markedDays, index]);
+        }
+    }
+
+    function deleteHabit(habitId) {
+        const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}`;
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        const promise = axios.delete(URL, config);
+        promise.then(() => console.log("Deletado com sucesso."));
+        promise.catch((err) => console.log(err.response.data));
+
+    }
 
     return (
         <PageContainer>
             <HeaderTrackIt />
+
             <ContentContainer>
                 <CreateHabitContainer>
                     <h2>Meus Hábitos</h2>
-                    <button>+</button>
+                    <button onClick={() => setIsCreateCardClosed(false)}>+</button>
                 </CreateHabitContainer>
-                <CreateHabitCard>
-                    <input type="text" placeholder="nome do hábito" />
-                    <WeekdaysContainer>
-                        {weekdays.map((w) => <DayCard isMarked={false}>{w}</DayCard>)}
-                    </WeekdaysContainer>
-                    <ActionContainer>
-                        <CancelButton>Cancelar</CancelButton>
-                        <SaveButton>Salvar</SaveButton>
-                    </ActionContainer>
-                </CreateHabitCard>
 
-                <HabitCard />
-                <HabitCard />
+                {!isCreateCardClosed &&
+                    <CreateHabitCard>
+                        <input
+                            onChange={(e) => setHabitName(e.target.value)}
+                            value={habitName}
+                            type="text"
+                            placeholder="nome do hábito"
+                            disabled={isSaveLoading}
+                            required
+                        />
+                        <WeekdaysContainer>
+                            {weekdays.map((w, index) => <WeekdayCard
+                                key={index}
+                                markDay={markDay}
+                                weekday={w}
+                                index={index}
+                                markedDays={markedDays}
+                                isSaveLoading={isSaveLoading}
+                            />)
+                            }
+                        </WeekdaysContainer>
+                        <ActionContainer>
+                            <CancelButton onClick={() => setIsCreateCardClosed(true)} disabled={isSaveLoading}>Cancelar</CancelButton>
+                            <SaveButton onClick={saveHabit} disabled={isSaveLoading}>
+                                {isSaveLoading ? <ThreeDots
+                                    height="13"
+                                    width="51"
+                                    radius="9"
+                                    color="#FFFFFF"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClassName=""
+                                    visible={true}
+                                /> : "Salvar"}
+                            </SaveButton>
+                        </ActionContainer>
+                    </CreateHabitCard>
+                }
 
-                <NoOneHabitContainer>
-                    Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                </NoOneHabitContainer>
+                {habitList.map((habit) => <HabitCard key={habit.id} id={habit.id} name={habit.name} days={habit.days} deleteHabit={deleteHabit} />)}
+
+                {habitList.length === 0 &&
+                    <NoOneHabitContainer>
+                        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+                    </NoOneHabitContainer>
+                }
             </ContentContainer>
+
             <FooterTrackIt />
         </PageContainer>
     )
@@ -46,7 +151,6 @@ const PageContainer = styled.div`
 const ContentContainer = styled.div`
     padding: 101px 18px;
 `
-
 const CreateHabitContainer = styled.div`
     margin-bottom: 20px;
     display: flex;
@@ -83,24 +187,16 @@ const CreateHabitCard = styled.div`
         &::placeholder{
             color: #D4D4D4;
         }
+        &:disabled{
+            background-color: #F2F2F2;
+            color: #B3B3B3;
+        }
     }
 
 `
 const WeekdaysContainer = styled.div`
     display: flex;
     margin-bottom: 29px;
-`
-const DayCard = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
-    border: 1px solid ${props => props.isMarked ? "#CFCFCF" : "#D4D4D4"};
-    color: ${props => props.isMarked ? "#FFFFFF" : "#DBDBDB"};
-    border-radius: 5px;
-    background-color: ${props => props.isMarked ? "#CFCFCF" : "#FFFFFF"};
 `
 const ActionContainer = styled.div`
     display: flex;
@@ -118,6 +214,9 @@ const CancelButton = styled.button`
     }
 `
 const SaveButton = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 84px;
     height: 35px;
     background-color: #52B6FF;

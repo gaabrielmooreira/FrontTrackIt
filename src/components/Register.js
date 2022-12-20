@@ -5,7 +5,6 @@ import { StyledForm,StyledButton,StyledInput } from "../styles/Style";
 import { ThreeDots } from "react-loader-spinner";
 
 export default function Register(){
-    const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up";
     const navigate = useNavigate();
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
@@ -16,6 +15,7 @@ export default function Register(){
 
     function registerUser(event){
         event.preventDefault();
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up";
         const promise = axios.post(URL,{email,name,image,password});
         setIsLoading(true);
         promise.then(() => {

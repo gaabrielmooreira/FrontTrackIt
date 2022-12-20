@@ -1,10 +1,14 @@
+import { useContext } from "react"
 import styled from "styled-components"
+import UserDetailsContext from "../contexts/UserDetailsContext"
 
 export default function HeaderTrackIt(){
+    const {userDetails} = useContext(UserDetailsContext);
+    const {image} = userDetails;
     return(
         <HeaderContainer>
             <h1>TrackIt</h1>
-            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/f15f5662080793.5a8432e3d5b6b.jpg" alt="Foto do Usuário"/>
+            <img src={image} alt="Foto do Usuário"/>
         </HeaderContainer>
     )
 }
