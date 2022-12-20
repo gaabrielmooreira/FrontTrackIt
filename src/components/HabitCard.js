@@ -6,7 +6,7 @@ export default function HabitCard({id,name,days,deleteHabit}){
     const [screenConfirm,setScreenConfirm] = useState(false);
 
     function confirmDelete(){
-        deleteHabit(id);
+        if(window.confirm("Você realmente quer deletar?")) deleteHabit(id);
         setScreenConfirm(false);
     }
 
@@ -22,20 +22,20 @@ export default function HabitCard({id,name,days,deleteHabit}){
                     {weekdays.map((w,index) => <DayCard data-test="habit-day" key={index} isMarked={days.includes(index)}>{w}</DayCard>)}
                 </WeekdaysContainer>
             </div>
+            {/* () => setScreenConfirm(true) onClick do ionIcon*/}
+            <ion-icon data-test="habit-delete-btn" onClick={confirmDelete} name="trash-outline"></ion-icon>
 
-            <ion-icon data-test="habit-delete-btn" onClick={() => setScreenConfirm(true)} name="trash-outline"></ion-icon>
-
-            {screenConfirm && 
+            {/* {screenConfirm && 
                 <DarkContainer>
                     <ConfirmationContainer>
                         <h3>Você deseja mesmo deletar esse hábito?</h3>
                         <div>
-                            <ConfirmButton data-test="habit-delete-btn" onClick={confirmDelete}>Confirm</ConfirmButton>
+                            <ConfirmButton onClick={confirmDelete}>Confirm</ConfirmButton>
                             <CancelButton onClick={cancelDelete}>Cancel</CancelButton>
                         </div>
                     </ConfirmationContainer>
                 </DarkContainer>
-            }
+            } */}
         </CardContainer>
     )
 }
