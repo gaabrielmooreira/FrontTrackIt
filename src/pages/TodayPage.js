@@ -90,7 +90,7 @@ export default function TodayPage() {
                 <DayInfos>
                     <h2>{dayOfWeek()}, {d.format('DD/MM')}</h2>
                     <HabitControl atLeastOneDone={percentage === 0 ? false:true}>
-                        {percentage === 0 ? "Nenhum hábito concluído ainda":`${percentage}% dos hábitos concluídos`}
+                        {percentage === 0 ? "Nenhum hábito concluído ainda":`${percentage.toFixed(0)}% dos hábitos concluídos`}
                     </HabitControl>
                 </DayInfos>
                 {todayList.map((h) => <DayHabitCard 

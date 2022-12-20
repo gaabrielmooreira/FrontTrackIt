@@ -25,6 +25,7 @@ const HeaderContainer = styled.header`
     box-sizing: border-box;
     padding: 0 18px;
     background-color: #126BA5;
+    z-index: 1;
     h1{
         font-family: 'Playball', cursive;
         font-size: 39px;

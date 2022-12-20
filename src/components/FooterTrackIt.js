@@ -51,6 +51,7 @@ const FooterContainer = styled.footer`
     justify-content: space-evenly;
     align-items: center;
     background-color: #FFFFFF;
+    z-index: 1;
 `
 const LinkContainer = styled.div`
     a{
